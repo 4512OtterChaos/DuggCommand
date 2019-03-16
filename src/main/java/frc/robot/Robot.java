@@ -7,12 +7,13 @@
 
 package frc.robot;
 
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.commands.ExampleCommand;
+import frc.robot.commands.*;
 import frc.robot.subsystems.ExampleSubsystem;
 
 /**
@@ -32,6 +33,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotInit() {
+    Network.init();
     m_oi = new OI();
   }
 
@@ -45,6 +47,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotPeriodic() {
+    NetworkTableInstance.getDefault().getTable("LiveWindow").getEntry("test").setDouble(Math.random());
   }
 
   /**

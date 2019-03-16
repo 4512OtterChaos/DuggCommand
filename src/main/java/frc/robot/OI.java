@@ -45,11 +45,7 @@ public class OI {
   public OI(){
     driver = new XboxJoystick(0);
 
-    driver.aButton.whileHeld(new ConditionalCommand(new conditionalIn(), new ExampleCommand()){
-      @Override
-      protected boolean condition(){
-        return true;
-      }
-    });
+    driver.aButton.whileActive(new IntakeIn(), driver.leftBumper, true);
+    driver.aButton.whileActive(new IntakeOut(), driver.leftBumper, false);
   }
 }

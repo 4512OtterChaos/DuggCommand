@@ -1,7 +1,7 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.buttons.JoystickButton;
+import frc.robot.*;
 
 public class XboxJoystick extends Joystick {
 
@@ -10,17 +10,17 @@ public class XboxJoystick extends Joystick {
         super(port);
     }
 
-    //we want these objects because they have a lot of handles for command based things!
-    public JoystickButton xButton = new JoystickButton(this, 3);
-	public JoystickButton yButton = new JoystickButton(this, 4);
-	public JoystickButton aButton = new JoystickButton(this, 1);
-	public JoystickButton bButton = new JoystickButton(this, 2);
-	public JoystickButton rightBumper = new JoystickButton(this, 6);
-	public JoystickButton leftBumper = new JoystickButton(this, 5);
-	public JoystickButton startButton = new JoystickButton(this, 8);
-	public JoystickButton selectButton = new JoystickButton(this, 7);
-	public JoystickButton leftStickButton = new JoystickButton(this, 9);
-    public JoystickButton rightStickButton = new JoystickButton(this, 10);
+    //these button fields represent the raw buttons on the controller
+    public XboxButton xButton = new XboxButton(this, 3);
+	public XboxButton yButton = new XboxButton(this, 4);
+	public XboxButton aButton = new XboxButton(this, 1);
+	public XboxButton bButton = new XboxButton(this, 2);
+	public XboxButton rightBumper = new XboxButton(this, 6);
+	public XboxButton leftBumper = new XboxButton(this, 5);
+	public XboxButton startButton = new XboxButton(this, 8);
+	public XboxButton selectButton = new XboxButton(this, 7);
+	public XboxButton leftStickButton = new XboxButton(this, 9);
+	public XboxButton rightStickButton = new XboxButton(this, 10);
     
     public double getLeftX(){
 		return this.getRawAxis(0);

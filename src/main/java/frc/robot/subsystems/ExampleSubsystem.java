@@ -9,7 +9,8 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.wpilibj.command.Subsystem;
-import frc.robot.commands.ExampleCommand;
+import frc.robot.Network;
+import frc.robot.commands.*;
 
 
 /**
@@ -34,11 +35,13 @@ public class ExampleSubsystem extends Subsystem {
   public void initDefaultCommand() {
     // Set the default command for a subsystem here.
     // setDefaultCommand(new MySpecialCommand());
+    setDefaultCommand(new ResetIntake());
   }
 
   @Override
   public void periodic(){
       setIntake(targetPercent);
+      Network.put("Intake Percent", targetPercent);
   }
 
   public void setTarget(double percent){
