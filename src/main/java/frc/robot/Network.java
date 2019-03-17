@@ -34,6 +34,6 @@ public class Network{
         else{
             entry.setValue(value);
         }*/
-        entry.setValue((double)value);
+        entry.setValue(value);
     }
 }

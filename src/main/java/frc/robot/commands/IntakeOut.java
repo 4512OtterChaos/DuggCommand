@@ -27,7 +27,7 @@ public class IntakeOut extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    Robot.m_subsystem.setIntake(-1);
+    Robot.m_subsystem.setTarget(-1);
   }
 
   // Make this return true when this Command no longer needs to run execute()

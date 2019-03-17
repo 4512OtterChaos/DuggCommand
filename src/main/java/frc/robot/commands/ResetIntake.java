@@ -26,7 +26,7 @@ public class ResetIntake extends InstantCommand {
   // Called once when the command executes
   @Override
   protected void initialize() {
-    Robot.m_subsystem.setIntake(0);
+    Robot.m_subsystem.setTarget(0);
   }
 
 }
