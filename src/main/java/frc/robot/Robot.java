@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.*;
+import frc.robot.subsystems.*;
 import frc.robot.subsystems.ExampleSubsystem;
 
 /**
@@ -25,7 +26,10 @@ import frc.robot.subsystems.ExampleSubsystem;
  */
 public class Robot extends TimedRobot {
   public static ExampleSubsystem m_subsystem = new ExampleSubsystem();
-  public static OI m_oi;
+  public static OI oi;
+
+  public static Drive drive;
+  public static Chassis chassis;
 
   /**
    * This function is run when the robot is first started up and should be
@@ -34,7 +38,11 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
     Network.init();
-    m_oi = new OI();
+
+    drive = new Drive();
+    chassis = new Chassis();
+
+    oi = new OI();
   }
 
   /**
