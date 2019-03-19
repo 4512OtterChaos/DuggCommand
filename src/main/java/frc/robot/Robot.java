@@ -56,6 +56,7 @@ public class Robot extends TimedRobot {
   @Override
   public void robotPeriodic() {
     NetworkTableInstance.getDefault().getTable("LiveWindow").getEntry("test").setDouble(Math.random());
+    Network.put("Right X", oi.driver.getRightX());
   }
 
   /**

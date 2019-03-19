@@ -45,7 +45,7 @@ public class OI {
   public OI(){
     driver = new XboxJoystick(0);
 
-    driver.rightStickButton.whileHeld(new DriveVision());
+    driver.leftBumper.whileActive(new DriveVision(), driver.rightBumper, false);
 
     driver.aButton.whileActive(new IntakeIn(), driver.leftBumper, true);
     driver.aButton.whileActive(new IntakeOut(), driver.leftBumper, false);

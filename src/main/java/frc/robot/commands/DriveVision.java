@@ -22,11 +22,11 @@ public class DriveVision extends Command {
 
     private Limelight lime;
     private double lastSpeed;
-    private final double maxSpeed = 0.35;//fastest while tracking
+    private final double maxSpeed = .45;//fastest while tracking
     private final double minSpeed = 0.15;//slowest while tracking
     private final double safeDist = 0;//inches distance from target before slow
-    private final double pow = (4/2.0);//curve motor response when close
-    private final double dead = 1.25;//angle of negligence
+    private final double pow = (1.0/1.2);//curve motor response when close
+    private final double dead = 1.75;//angle of negligence
 
     public DriveVision() {
         requires(Robot.drive);
@@ -37,7 +37,7 @@ public class DriveVision extends Command {
     protected void initialize() {
         lime = Robot.chassis.frontLime;
         lastSpeed=Robot.drive.getDriveSpeed();
-        Robot.drive.shiftSet(maxSpeed);
+        Robot.drive.shiftSet(1);
         lime.lightOn();
         lime.shiftPipe(1);
     }
@@ -45,18 +45,16 @@ public class DriveVision extends Command {
     // Called repeatedly when this Command is scheduled to run
     @Override
     protected void execute() {
-        double forward = Robot.oi.driver.getLeftY();
-        double turn = Robot.oi.driver.getRightX();
-        if(lime.getTv()==1){
+        double forward = Robot.oi.driver.getLeftY()*maxSpeed;
+        double turn = Robot.oi.driver.getRightX()*maxSpeed;
+        if(lime.getTv()==1 && Math.abs(lime.getTx())>dead){
             double limeTurn = lime.getTx();
-            limeTurn = (Math.abs(limeTurn)<dead)? 0:limeTurn;
-            limeTurn /= ((30.0));//degrees -> percentage fov
-            limeTurn*=3.2;
-            limeTurn = ((limeTurn<0)? -1:1)*Math.pow(Math.abs(limeTurn), pow);
+            limeTurn /= ((30.0)/2.0);//degrees -> percentage fov
+            limeTurn = ((limeTurn<0)? -0.5:0.5)*(Math.pow(Math.abs(limeTurn), pow)+Math.pow(Math.abs(limeTurn), 4));
+            limeTurn = Convert.limit(limeTurn);
+            limeTurn*=.18;
+            limeTurn+=(limeTurn<0)? -.12:.12;
             turn += limeTurn;
-        }
-        else{
-            Robot.drive.shiftSet(maxSpeed);
         }
         Robot.drive.setForward(forward);
         Robot.drive.setTurn(turn);

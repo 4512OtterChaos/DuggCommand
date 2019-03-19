@@ -33,7 +33,7 @@ public class Drive extends Subsystem {
     public WPI_TalonSRX backLeft;
 
     //state
-    private double dkSpeedNeutral = 0.4;
+    private double dkSpeedNeutral = 0.45;
     private double dkSpeedShift = 0.2;
     private double dkSpeed = dkSpeedNeutral;
     private double forward = 0;
@@ -60,6 +60,8 @@ public class Drive extends Subsystem {
         backRight.setInverted(InvertType.FollowMaster);
         frontLeft.setInverted(false);
         backLeft.setInverted(InvertType.FollowMaster);
+        frontRight.configOpenloopRamp(0.15);
+        frontLeft.configOpenloopRamp(0.15);
     }
 
     @Override
