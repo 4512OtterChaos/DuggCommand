@@ -13,6 +13,9 @@ package frc.robot.subsystems;
 
 
 import frc.robot.Limelight;
+import frc.robot.Network;
+import frc.robot.Robot;
+import frc.robot.RobotMap;
 import frc.robot.commands.*;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.command.Subsystem;
@@ -20,14 +23,36 @@ import edu.wpi.first.wpilibj.PIDOutput;
 import edu.wpi.first.wpilibj.PIDSource;
 import com.ctre.phoenix.sensors.PigeonIMU;
 import edu.wpi.first.wpilibj.Compressor;
+import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
+import edu.wpi.first.wpilibj.Timer;
 
 public class Chassis extends Subsystem {
 
+    public Encoder dEncoderL = new Encoder(4, 5);
+    public Encoder dEncoderR = new Encoder(2, 3);
+
     public Limelight frontLime;
+
+    private double time = Timer.getFPGATimestamp();
+
+    public PigeonIMU imu = new PigeonIMU(5);
+    private static final int ANGULAR_RATE_AXIS_X = 0;
+    private static final int ANGULAR_RATE_AXIS_Y = 1;
+    private static final int ANGULAR_RATE_AXIS_Z = 2;
+    private static final int ANGULAR_RATE_AXES = 3;
+    private final double[] angularRate = new double[ANGULAR_RATE_AXES];
+    private final double[] ypr = new double[3];
+
+    private double x = 0;
+    private double y = 0;
+
 
     public Chassis() {
         frontLime = new Limelight("limelight-one");
+        dEncoderL.reset();
+        dEncoderR.reset();
+        imu.setTemperatureCompensationDisable(false);
     }
 
     @Override
@@ -39,11 +64,48 @@ public class Chassis extends Subsystem {
     @Override
     public void periodic() {
         // Put code here to be run every loop
+        Network.put("Left Rate", dEncoderL.getRate());
+        Network.put("Right Rate", dEncoderR.getRate());
 
+        imu.getYawPitchRoll(ypr);
+        Network.put("Pigeon Compass", imu.getAbsoluteCompassHeading());
+        Network.put("Pigeon Heading", ypr[0]);
+        Network.put("Pigeon Fused", imu.getFusedHeading());
+
+        checkPose();
+        
+        Network.put("Robot X", x);
+        Network.put("Robot Y", y);
     }
 
     // Put methods for controlling this subsystem
     // here. Call these from Commands.
 
+    private void checkPose(){
+        double time = Timer.getFPGATimestamp();
+        double dt = time - this.time;
+        this.time = time;
+
+        double forwardV = getForwardVelocity();
+        double rotationalV = getRotationalVelocity();
+        double dForward = forwardV * dt;
+        double dHeading = rotationalV * dt;
+
+        double avgHeading = Math.toRadians(ypr[0] + dHeading/2.0);
+        x += dForward * Math.cos(avgHeading);
+        y += dForward * Math.sin(avgHeading);
+    }
+
+    public double getRotationalVelocity(){
+        imu.getRawGyro(angularRate);
+        return angularRate[ANGULAR_RATE_AXIS_Z];
+    }
+
+    public double getForwardVelocity(){
+        double leftVelocity = dEncoderL.getRate()*RobotMap.COUNTS_PER_100MS_TO_INCHES_PER_SEC;
+        double rightVelocity = dEncoderR.getRate()*RobotMap.COUNTS_PER_100MS_TO_INCHES_PER_SEC;
+        double forwardVelocity = (leftVelocity + rightVelocity) / 2.0;
+        return forwardVelocity;
+    }
 }
 

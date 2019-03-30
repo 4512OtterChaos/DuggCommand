@@ -60,8 +60,8 @@ public class Drive extends Subsystem {
         backRight.setInverted(InvertType.FollowMaster);
         frontLeft.setInverted(false);
         backLeft.setInverted(InvertType.FollowMaster);
-        frontRight.configOpenloopRamp(0.15);
-        frontLeft.configOpenloopRamp(0.15);
+        frontRight.configOpenloopRamp(0.175);
+        frontLeft.configOpenloopRamp(0.175);
     }
 
     @Override
