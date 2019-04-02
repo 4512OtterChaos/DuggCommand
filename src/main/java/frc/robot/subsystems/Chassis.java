@@ -12,8 +12,8 @@
 package frc.robot.subsystems;
 
 
-import frc.robot.Limelight;
-import frc.robot.Network;
+import frc.robot.common.Limelight;
+import frc.robot.common.Network;
 import frc.robot.Robot;
 import frc.robot.RobotMap;
 import frc.robot.commands.*;
@@ -31,6 +31,8 @@ public class Chassis extends Subsystem {
 
     public Encoder dEncoderL = new Encoder(4, 5);
     public Encoder dEncoderR = new Encoder(2, 3);
+
+    private boolean rumble = false;
 
     public Limelight frontLime;
 
@@ -53,6 +55,8 @@ public class Chassis extends Subsystem {
         dEncoderL.reset();
         dEncoderR.reset();
         imu.setTemperatureCompensationDisable(false);
+        imu.setFusedHeading(0);
+        imu.setYaw(0);
     }
 
     @Override
@@ -67,8 +71,9 @@ public class Chassis extends Subsystem {
         Network.put("Left Rate", dEncoderL.getRate());
         Network.put("Right Rate", dEncoderR.getRate());
 
+        
         imu.getYawPitchRoll(ypr);
-        Network.put("Pigeon Compass", imu.getAbsoluteCompassHeading());
+        Network.put("Pigeon Compass", imu.getCompassHeading());
         Network.put("Pigeon Heading", ypr[0]);
         Network.put("Pigeon Fused", imu.getFusedHeading());
 
@@ -76,6 +81,16 @@ public class Chassis extends Subsystem {
         
         Network.put("Robot X", x);
         Network.put("Robot Y", y);
+
+        if(Robot.oi.driverXbox.rightTrigger.get()){
+            rumble=true;
+            Robot.oi.driverXbox.setRumble(Robot.oi.driverXbox.getRightTrigger());
+        }
+        else if(rumble){
+            rumble=false;
+            Robot.oi.driverXbox.setRumble(0);
+        }
+        Network.put("Trigger", Robot.oi.driverXbox.getRightTrigger());
     }
 
     // Put methods for controlling this subsystem

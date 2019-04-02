@@ -12,18 +12,13 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.InvertType;
-import com.ctre.phoenix.motorcontrol.StatusFrame;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
-import frc.robot.Config;
-import frc.robot.Convert;
-import frc.robot.Network;
-import frc.robot.PIDConstants;
-import frc.robot.commands.DriveManual;
-
 import edu.wpi.first.wpilibj.command.Subsystem;
+import frc.robot.commands.DriveManual;
+import frc.robot.common.Config;
+import frc.robot.common.Convert;
 
 public class Drive extends Subsystem {
 

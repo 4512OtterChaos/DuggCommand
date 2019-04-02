@@ -1,4 +1,4 @@
-package frc.robot;
+package frc.robot.common;
 
 import edu.wpi.first.networktables.*;
 
@@ -35,6 +35,10 @@ public class Limelight{
         NetworkTableEntry lightMode = table.getEntry("ledMode");
         lightMode.setNumber(3);
     }
+    public void lightDefault(){
+        NetworkTableEntry lightMode = table.getEntry("ledMode");
+        lightMode.setNumber(0);
+    }
 
     public void toggleCam(){
         NetworkTableEntry camMode = table.getEntry("camMode");
@@ -56,7 +60,7 @@ public class Limelight{
     }
     public void shiftPipe(double value){
         NetworkTableEntry pipe = table.getEntry("pipeline");
-        pipe.setDouble(value);
+        pipe.setNumber(value);
     }
 
     /**

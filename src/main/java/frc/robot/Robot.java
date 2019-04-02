@@ -7,12 +7,17 @@
 
 package frc.robot;
 
+import com.ctre.phoenix.motorcontrol.NeutralMode;
+
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
+import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.common.*;
+import frc.robot.control.*;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
 import frc.robot.subsystems.ExampleSubsystem;
@@ -31,18 +36,25 @@ public class Robot extends TimedRobot {
   public static Drive drive;
   public static Chassis chassis;
 
+  public static final String dualConfig = "dual";
+  public static final String soloConfig = "solo";
+  private static String controlConfig = dualConfig;
+  private static SendableChooser<String> controlChooser = new SendableChooser<>();
+
   /**
    * This function is run when the robot is first started up and should be
    * used for any initialization code.
    */
   @Override
   public void robotInit() {
-    Network.init();
-
     drive = new Drive();
     chassis = new Chassis();
 
     oi = new OI();
+
+    controlChooser.setDefaultOption("Dual", dualConfig);
+    controlChooser.addOption("Solo", soloConfig);
+    SmartDashboard.putData("Choices",controlChooser);
   }
 
   /**
@@ -55,8 +67,6 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotPeriodic() {
-    NetworkTableInstance.getDefault().getTable("LiveWindow").getEntry("test").setDouble(Math.random());
-    Network.put("Right X", oi.driver.getRightX());
   }
 
   /**
@@ -66,6 +76,10 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void disabledInit() {
+    Config.configNeutral(NeutralMode.Coast, drive.frontLeft);
+    Config.configNeutral(NeutralMode.Coast, drive.frontRight);
+    Config.configNeutral(NeutralMode.Coast, drive.backLeft);
+    Config.configNeutral(NeutralMode.Coast, drive.backRight);
   }
 
   @Override
@@ -107,10 +121,22 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
+    Config.configNeutral(NeutralMode.Brake, drive.frontLeft);
+    Config.configNeutral(NeutralMode.Brake, drive.frontRight);
+    Config.configNeutral(NeutralMode.Brake, drive.backLeft);
+    Config.configNeutral(NeutralMode.Brake, drive.backRight);
     // This makes sure that the autonomous stops running when
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
     // this line or comment it out.
+    controlConfig = controlChooser.getSelected();
+    if(controlConfig.equals(dualConfig)){
+        oi.setDual(true);
+    }
+    else if(controlConfig.equals(soloConfig)){
+        oi.setDual(false);
+        oi.solo.assign(oi.driverXbox);
+    }
   }
 
   /**

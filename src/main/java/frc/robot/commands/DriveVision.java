@@ -13,9 +13,7 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 
-import frc.robot.Convert;
-import frc.robot.Limelight;
-import frc.robot.Network;
+import frc.robot.common.*;
 import frc.robot.Robot;
 import frc.robot.RobotMap;
 public class DriveVision extends Command {
@@ -45,8 +43,8 @@ public class DriveVision extends Command {
     // Called repeatedly when this Command is scheduled to run
     @Override
     protected void execute() {
-        double forward = Robot.oi.driver.getLeftY()*maxSpeed;
-        double turn = Robot.oi.driver.getRightX()*maxSpeed;
+        double forward = Robot.oi.driverXbox.getLeftY()*maxSpeed;
+        double turn = Robot.oi.driverXbox.getRightX()*maxSpeed;
         if(lime.getTv()==1 && Math.abs(lime.getTx())>dead){
             double limeTurn = lime.getTx();
             limeTurn /= ((30.0)/2.0);//degrees -> percentage fov

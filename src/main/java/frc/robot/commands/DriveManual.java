@@ -26,8 +26,8 @@ public class DriveManual extends Command {
     // Called repeatedly when this Command is scheduled to run
     @Override
     protected void execute() {
-        double forward = Robot.oi.driver.getLeftY();
-        double turn = Robot.oi.driver.getRightX();
+        double forward = Robot.oi.driverXbox.getLeftY();
+        double turn = Robot.oi.driverXbox.getRightX();
         Robot.drive.setForward(forward);
         Robot.drive.setTurn(turn);
     }

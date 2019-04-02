@@ -1,9 +1,8 @@
-package frc.robot;
+package frc.robot.common;
 
 import edu.wpi.first.wpilibj.smartdashboard.*;
 
 import java.util.ArrayList;
-import java.util.Set;
 
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
@@ -12,11 +11,8 @@ import edu.wpi.first.wpilibj.shuffleboard.*;
 public class Network{
     private static NetworkTable table;
 
-    public static void init(){
-        table = NetworkTableInstance.getDefault().getTable("LiveWindow");
-    }
-
     public static void put(String key, Object value){
+        table = NetworkTableInstance.getDefault().getTable("LiveWindow");
         NetworkTableEntry entry = table.getEntry(key);
         /*
         if(value instanceof String)
